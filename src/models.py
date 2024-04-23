@@ -1,10 +1,11 @@
 # Importación de los módulos necesarios
 import os  # Permite interactuar con el sistema operativo
 import sys  # Proporciona funciones y variables que se utilizan para manipular diferentes partes del entorno de Python
-from sqlalchemy import Column, ForeignKey, Integer, String, Table  # Importa clases y funciones necesarias de SQLAlchemy
+from sqlalchemy import Column, ForeignKey, Integer, String, Table, DateTime  # Importa clases y funciones necesarias de SQLAlchemy
 from sqlalchemy.orm import relationship, declarative_base  # Importa clases y funciones necesarias de SQLAlchemy
 from sqlalchemy import create_engine  # Importa la función create_engine de SQLAlchemy para crear el motor de la base de datos
 from eralchemy2 import render_er  # Importa la función render_er de eralchemy2 para generar el diagrama ER
+from datetime import datetime
 
 # Declaración de la clase base para las clases de las entidades
 Base = declarative_base()
@@ -17,7 +18,6 @@ usuario_favoritos = Table('usuario_favoritos', Base.metadata, #Base.metadata en 
     Column('favorito_id', Integer, ForeignKey('favoritos.id'))
 )
 
-
 # Definición de la entidad Usuario
 class Usuario(Base):
     __tablename__ = 'usuario'  # Nombre de la tabla en la base de datos
@@ -25,6 +25,7 @@ class Usuario(Base):
     nombre = Column(String(250), nullable=False)  # Define una columna para el nombre del usuario
     email = Column(String(250), nullable=False, unique=True)  # Define una columna para el correo electrónico del usuario, único
     password = Column(String(250), nullable=False)  # Define una columna para la contraseña del usuario
+    fecha_registro = Column(DateTime, default=datetime.now)
     # Relación uno a muchos con la tabla Favoritos
     favoritos = relationship("Favoritos", secondary=usuario_favoritos, back_populates="usuarios")  # Define la relación entre Usuario y Favoritos
 
@@ -41,7 +42,7 @@ class Favoritos(Base):
 class Film(Base):
     __tablename__ = 'film'  # Nombre de la tabla en la base de datos
     id = Column(Integer, primary_key=True)  # Define una columna para el ID de la película
-    title = Column(String(250), nullable=False)  # Define una columna para el título de la película
+    name = Column(String(250), nullable=False)  # Define una columna para el título de la película
     #director = Column(String(250))  # Define una columna para el director de la película
 
 # Definición de la entidad Specie
