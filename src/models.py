@@ -35,8 +35,13 @@ class Favoritos(Base):
     id = Column(Integer, primary_key=True)  # Define una columna para el ID del favorito
     tipo = Column(String(50), nullable=False)  # Define una columna para el tipo de favorito (planeta, personaje, etc.)
     elemento_id = Column(Integer, nullable=False)  # Define una columna para el ID del elemento favorito
-    # Relación muchos a muchos con la tabla Usuario
-    usuarios = relationship("Usuario", secondary=usuario_favoritos, back_populates="favoritos")  # Define la relación entre Favoritos y Usuario
+    
+# Relaciones con las tablas de elementos favoritos
+    film = relationship("Film", uselist=False, back_populates="favoritos")
+    specie = relationship("Specie", uselist=False, back_populates="favoritos")
+    starship = relationship("Starship", uselist=False, back_populates="favoritos")
+    vehicle = relationship("Vehicle", uselist=False, back_populates="favoritos")
+
 
 # Definición de la entidad Film
 class Film(Base):
@@ -44,6 +49,9 @@ class Film(Base):
     id = Column(Integer, primary_key=True)  # Define una columna para el ID de la película
     name = Column(String(250), nullable=False)  # Define una columna para el título de la película
     #director = Column(String(250))  # Define una columna para el director de la película
+   
+    # Relación uno a uno con la tabla Favoritos
+    favoritos = relationship("Favoritos", back_populates="film")
 
 # Definición de la entidad Specie
 class Specie(Base):
@@ -51,17 +59,26 @@ class Specie(Base):
     id = Column(Integer, primary_key=True)  # Define una columna para el ID de la especie
     name = Column(String(250), nullable=False)  # Define una columna para el nombre de la especie
 
+    # Relación uno a uno con la tabla Favoritos
+    favoritos = relationship("Favoritos", back_populates="specie")
+
 # Definición de la entidad Starship
 class Starship(Base):
     __tablename__ = 'starship'  # Nombre de la tabla en la base de datos
     id = Column(Integer, primary_key=True)  # Define una columna para el ID de la nave espacial
     name = Column(String(250), nullable=False)  # Define una columna para el nombre de la nave espacial
 
+    # Relación uno a uno con la tabla Favoritos
+    favoritos = relationship("Favoritos", back_populates="starship")
+
 # Definición de la entidad Vehicle
 class Vehicle(Base):
     __tablename__ = 'vehicle'  # Nombre de la tabla en la base de datos
     id = Column(Integer, primary_key=True)  # Define una columna para el ID del vehículo
     name = Column(String(250), nullable=False)  # Define una columna para el nombre del vehículo
+
+    # Relación uno a uno con la tabla Favoritos
+    favoritos = relationship("Favoritos", back_populates="vehicle")
 
 # Renderizar el diagrama ER
 render_er(Base, 'diagram.png')  # Genera el diagrama ER y lo guarda como 'diagram.png'
